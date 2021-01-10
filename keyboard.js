@@ -20,7 +20,6 @@ const Keyboard = {
         //create main elements
         this.elements.main = document.createElement('div');
         this.elements.keysContainer = document.createElement('div');
-        console.log();
 
         //setup main elements
         this.elements.main.classList.add('keyboard', 'keyboard--hidden');
@@ -121,8 +120,8 @@ const Keyboard = {
 
                 default:
                     keyElement.textContent = key.toLowerCase();
-
                     keyElement.addEventListener('click', () => {
+                        this.properties.value = document.querySelector('.use-keyboard-input').value;
                         this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
                         this._triggerEvent('oninput');
                     });
@@ -138,11 +137,10 @@ const Keyboard = {
             }
         })
         return fragment;
-        console.log(fragment);
     },
 
     _triggerEvent(handlerName) {
-        if (typeof this.eventHandlers[handlerName] == 'function') {
+        if (typeof this.eventHandlers[handlerName] === 'function') {
             this.eventHandlers[handlerName](this.properties.value);
         }
     },
