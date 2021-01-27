@@ -41,23 +41,25 @@ const Keyboard = {
             })
         })
 
-        const parentForKeyboard = document.querySelector('.keyboard__keys');
-        parentForKeyboard.addEventListener('click', event => {
-            if (Object.values(event.target.parentNode.classList).indexOf('keyboard__key') === -1 && Object.values(event.target.classList).indexOf('keyboard__key') === -1) {
+        this.elements.keysContainer.addEventListener('click', event => {
+
+            const classList = event.target.classList;
+            const parentClassList = event.target.parentNode.classList;
+            if (!classList.contains('keyboard__key') && !parentClassList.contains('keyboard__key')) {
                 return;
-            } else if (Object.values(event.target.classList).indexOf('keyboard__key--extra-wide') !== -1 || Object.values(event.target.parentNode.classList).indexOf('keyboard__key--extra-wide') !== -1) {
+            } else if (classList.contains('keyboard__key--extra-wide') || parentClassList.contains('keyboard__key--extra-wide')) {
                 this.properties.value += ' ';
                 this._triggerEvent('oninput');
-            } else if (Object.values(event.target.classList).indexOf('backspace') !== -1 || Object.values(event.target.parentNode.classList).indexOf('backspace') !== -1) {
+            } else if (classList.contains('backspace') || parentClassList.contains('backspace')) {
                 this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
                 this._triggerEvent('oninput');
-            } else if (Object.values(event.target.classList).indexOf('keyboard__key--activatable') !== -1 || Object.values(event.target.parentNode.classList).indexOf('keyboard__key--activatable') !== -1) {
+            } else if (classList.contains('keyboard__key--activatable') || parentClassList.contains('keyboard__key--activatable')) {
                 this._toggleCapsLock();
-                keyboard_capslock.parentNode.classList.toggle('keyboard__key--active', this.properties.capslock);  
-            } else if (Object.values(event.target.classList).indexOf('return') !== -1 || Object.values(event.target.parentNode.classList).indexOf('return') !== -1) {
+                keyboard_capslock.parentNode.classList.toggle('keyboard__key--active', this.properties.capslock);
+            } else if (classList.contains('return') || parentClassList.contains('return')) {
                 this.properties.value += '\n';
                 this._triggerEvent('oninput');
-            } else if (Object.values(event.target.classList).indexOf('done') !== -1 || Object.values(event.target.parentNode.classList).indexOf('done') !== -1) {
+            } else if (classList.contains('done') || parentClassList.contains('done')) {
                 this.close();
                 this._triggerEvent('onclose');
             } else {
