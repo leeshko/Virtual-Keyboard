@@ -2,7 +2,8 @@ const Keyboard = {
     elements: {
         main: null,
         keysContainer: null,
-        keys: []
+        keys: [],
+        input: null
     },
 
     eventHandlers: {
@@ -35,6 +36,7 @@ const Keyboard = {
         // Auto use keyboard
         document.querySelectorAll('.use-keyboard-input').forEach(element => {
             element.addEventListener('focus', () => {
+                this.elements.input = element;
                 this.open(element.value, currentValue => {
                     element.value = currentValue;
                 });
@@ -42,9 +44,10 @@ const Keyboard = {
         })
 
         this.elements.keysContainer.addEventListener('click', event => {
-
             const classList = event.target.classList;
             const parentClassList = event.target.parentNode.classList;
+
+            this.properties.value = this.elements.input.value;
             if (!classList.contains('keyboard__key') && !parentClassList.contains('keyboard__key')) {
                 return;
             } else if (classList.contains('keyboard__key--extra-wide') || parentClassList.contains('keyboard__key--extra-wide')) {
@@ -63,7 +66,9 @@ const Keyboard = {
                 this.close();
                 this._triggerEvent('onclose');
             } else {
-                this.properties.value += this.properties.capsLock ? event.target.textContent.toUpperCase() : event.target.textContent.toLowerCase();
+                this.properties.value += this.properties.capsLock ?
+                    event.target.textContent.toUpperCase() :
+                    event.target.textContent.toLowerCase();
                 this._triggerEvent('oninput');
             }
         })
@@ -157,7 +162,7 @@ const Keyboard = {
     },
 
     close() {
-        this.properties.value = "";
+        this.properties.value = '';
         this.eventHandlers.oninput = null;
         this.eventHandlers.onclose = null;
         this.elements.main.classList.add('keyboard--hidden');
